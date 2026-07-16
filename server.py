@@ -93,6 +93,8 @@ def chat(
 
     return {
         "model": use_model,
+        "think": think,
+        "thinking_enabled": think is not None and think is not False,
         "content": message["content"],
         "thinking": message["thinking"] or None,
     }
