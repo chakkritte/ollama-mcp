@@ -202,4 +202,4 @@ Ollama Cloud's model catalog changes frequently. To refresh this guide:
 
 ## License
 
-MIT
+Apache License 2.0
