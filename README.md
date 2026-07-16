@@ -133,7 +133,7 @@ By default, the server runs as an MCP server over stdio, which is the standard t
 | `list_models` | List all available Ollama Cloud models. |
 | `get_current_model` | Return the current default model. |
 | `set_current_model` | Change the default model used for chat. |
-| `chat` | Send a prompt to the current (or specified) model. Supports an optional `system` message and `model` override. |
+| `chat` | Send a prompt to the current (or specified) model. Supports an optional `system` message, a `model` override, and a `think` argument to enable extended thinking/reasoning mode (`true` or `"low"`/`"medium"`/`"high"`). When thinking is enabled, the response includes a `thinking` field with the model's reasoning trace. |
 | `web_search` | Search the web using Ollama's hosted web search API. Returns up to `max_results` (default 5, max 10) results with title, URL, and a content snippet. |
 | `web_fetch` | Fetch a webpage using Ollama's hosted web fetch API. Returns the page title, main text content, and up to 10 links. |
 
@@ -164,6 +164,7 @@ Then you can ask Claude to:
 - **"Use the math model to solve this problem"** — the guide recommends `deepseek-v4-pro`.
 - **"Chat with `glm-5.2` and refactor this function"**
 - **"Set the default model to `deepseek-v4-pro`"**
+- **"Think through this problem with `deepseek-v4-pro`"** — calls `chat` with `think: true` and returns the reasoning trace in `thinking`.
 - **"Search the web for the latest news on …"** — uses `web_search`.
 - **"Fetch the page at https://… and summarize it"** — uses `web_fetch`.
 

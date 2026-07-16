@@ -1,4 +1,5 @@
 import os
+from typing import Literal
 
 import httpx
 from dotenv import load_dotenv
@@ -50,8 +51,18 @@ def chat(
     prompt: str,
     model: str | None = None,
     system: str = "",
+    think: bool | Literal["low", "medium", "high"] | None = None,
 ):
-    """Chat with an Ollama Cloud model."""
+    """Chat with an Ollama Cloud model.
+
+    Set `think` to enable extended thinking/reasoning mode:
+    - `True`, or one of `"low"`, `"medium"`, `"high"` to control the thinking effort
+      (model support varies — e.g. `deepseek-v4-pro`, `glm-5.2`, `kimi-k2.5`).
+    - `False` or `None` to disable thinking.
+
+    When thinking is enabled, the response includes a `thinking` field with the
+    model's reasoning trace, alongside the final `content`.
+    """
 
     use_model = model or current_model
 
@@ -75,11 +86,15 @@ def chat(
     response = client.chat(
         model=use_model,
         messages=messages,
+        think=think,
     )
+
+    message = response["message"]
 
     return {
         "model": use_model,
-        "content": response["message"]["content"],
+        "content": message["content"],
+        "thinking": message["thinking"] or None,
     }
 
 
