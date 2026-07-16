@@ -23,6 +23,15 @@ current_model = os.getenv("DEFAULT_MODEL")
 mcp = FastMCP("Ollama Cloud")
 
 
+def _think_label(think: bool | str | None) -> str:
+    """Human-readable label for a `think` value, shown in result headers."""
+    if think is None or think is False:
+        return "off"
+    if think is True:
+        return "on"
+    return str(think)
+
+
 @mcp.tool()
 def list_models():
     """List all available Ollama Cloud models."""
@@ -62,6 +71,10 @@ def chat(
 
     When thinking is enabled, the response includes a `thinking` field with the
     model's reasoning trace, alongside the final `content`.
+
+    The response always reports the model name and think mode (in the `model` and
+    `think` fields, and as a header prefix on `content`). When relaying the result
+    to the user, always state which model was used and whether thinking was on.
     """
 
     use_model = model or current_model
@@ -91,11 +104,17 @@ def chat(
 
     message = response["message"]
 
+    content = message["content"]
+    header = f"[model: {use_model} | think: {_think_label(think)}]"
+    # Embed the header in the content so the calling client surfaces the
+    # model name and think mode, not just the answer body.
+    content = f"{header}\n\n{content}" if content else header
+
     return {
         "model": use_model,
         "think": think,
         "thinking_enabled": think is not None and think is not False,
-        "content": message["content"],
+        "content": content,
         "thinking": message["thinking"] or None,
     }
 
