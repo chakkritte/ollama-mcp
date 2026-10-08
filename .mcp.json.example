@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ollama": {
+      "command": "/absolute/path/to/ollama-mcp/.venv/bin/python",
+      "args": ["/absolute/path/to/ollama-mcp/server.py"],
+      "env": {
+        "OLLAMA_HOST": "https://ollama.com",
+        "OLLAMA_API_KEY": "YOUR_OLLAMA_API_KEY",
+        "DEFAULT_MODEL": "gpt-oss:120b",
+        "OLLAMA_AGENT_WORKSPACE": "/absolute/path/to/your/project",
+        "OLLAMA_AGENT_ALLOW_WRITE": "0",
+        "OLLAMA_AGENT_ALLOW_SHELL": "0"
+      }
+    }
+  }
+}
